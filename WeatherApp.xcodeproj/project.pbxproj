@@ -16,6 +16,9 @@
 		EBA3C6671B3ABD0B0072FEF3 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EBA3C6661B3ABD0B0072FEF3 /* CoreLocation.framework */; };
 		EBA3C6701B3ADDBC0072FEF3 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = EBA3C66F1B3ADDBC0072FEF3 /* Images.xcassets */; };
 		EBA3C6721B3AF48E0072FEF3 /* DataServiceParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBA3C6711B3AF48E0072FEF3 /* DataServiceParser.swift */; };
+		EBB6E3911B3BEDCE00659F53 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB7344A61B3A6DA600D755C5 /* ViewController.swift */; };
+		EBB6E3921B3BEDD200659F53 /* DataServiceParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBA3C6711B3AF48E0072FEF3 /* DataServiceParser.swift */; };
+		EBB6E3931B3BEDD800659F53 /* WeatherReportModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBA3C65E1B3AA0730072FEF3 /* WeatherReportModel.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -257,6 +260,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				EBB6E3931B3BEDD800659F53 /* WeatherReportModel.swift in Sources */,
+				EBB6E3911B3BEDCE00659F53 /* ViewController.swift in Sources */,
+				EBB6E3921B3BEDD200659F53 /* DataServiceParser.swift in Sources */,
 				EB7344BB1B3A6DA600D755C5 /* WeatherAppTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
