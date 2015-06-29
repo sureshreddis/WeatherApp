@@ -12,7 +12,7 @@ class DataServiceParser : NSObject {
 
     var weatherGlobalModelObject:WeatherBaseModel!
     var weatherReportArray:Array<WeatherReportModel>? = [WeatherReportModel]()
-    
+    var arrayOfItems:Array<String>? = [String]()
     // MARK:- Create Singleton Which is used across app
     class var sharedInstance : DataServiceParser {
         struct Singleton {
@@ -39,17 +39,25 @@ class DataServiceParser : NSObject {
         weatherGlobalModelObject.longitude = currLongitude.stringValue
         weatherGlobalModelObject.latitude = currLatitude.stringValue
         
-        var addCurrentResult = jsonData["currently"] as! NSDictionary
+        if let addCurrentResult = jsonData["currently"] as? NSDictionary {
         self.addValues(addCurrentResult)
+            arrayOfItems?.append("Currently")
+        }
         
-        var addMinutelyResult = jsonData["minutely"] as! NSDictionary
+        if let addMinutelyResult = jsonData["minutely"] as? NSDictionary {
         self.addValues(addMinutelyResult)
+            arrayOfItems?.append("Minutely")
+        }
         
-        var addHourlyResult = jsonData["hourly"] as! NSDictionary
+        if let addHourlyResult = jsonData["hourly"] as? NSDictionary {
         self.addValues(addHourlyResult)
+            arrayOfItems?.append("Hourly")
+        }
         
-        var addDailyResult = jsonData["daily"] as! NSDictionary
+        if let addDailyResult = jsonData["daily"] as? NSDictionary {
         self.addValues(addDailyResult)
+            arrayOfItems?.append("Daily")
+        }
         
     }
     
