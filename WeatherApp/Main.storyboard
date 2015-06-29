@@ -117,28 +117,12 @@
                                 <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="dao-dn-8hj">
-                                <rect key="frame" x="280" y="280" width="40" height="40"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="40" id="IQy-Vf-Oqf"/>
-                                    <constraint firstAttribute="height" constant="20" id="PnC-vV-zio"/>
-                                    <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="40" id="v3w-dB-HiJ"/>
-                                    <constraint firstAttribute="width" constant="20" id="zgD-6X-mmJ"/>
-                                </constraints>
-                                <variation key="default">
-                                    <mask key="constraints">
-                                        <exclude reference="PnC-vV-zio"/>
-                                        <exclude reference="zgD-6X-mmJ"/>
-                                    </mask>
-                                </variation>
-                            </activityIndicatorView>
                         </subviews>
                         <color key="backgroundColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                         <constraints>
                             <constraint firstItem="mNF-g9-ekH" firstAttribute="leading" secondItem="PWP-Hi-A2n" secondAttribute="leading" id="21j-vF-CYO"/>
                             <constraint firstItem="8WA-EP-AZo" firstAttribute="leading" secondItem="vzX-zg-adY" secondAttribute="leading" id="2pC-Ry-5kl"/>
                             <constraint firstItem="Pa4-sd-cgl" firstAttribute="bottom" secondItem="j9H-uJ-dWe" secondAttribute="bottom" id="6BP-Tq-YrA"/>
-                            <constraint firstAttribute="centerX" secondItem="dao-dn-8hj" secondAttribute="centerX" id="6gw-uP-y6v"/>
                             <constraint firstItem="bt6-j9-Xy4" firstAttribute="centerX" secondItem="Lmz-JV-zqb" secondAttribute="centerX" id="8e9-af-N9P"/>
                             <constraint firstItem="87Y-g5-aTN" firstAttribute="top" secondItem="yid-Ve-bhC" secondAttribute="bottom" constant="18" id="Ay7-WO-Xoa"/>
                             <constraint firstItem="bt6-j9-Xy4" firstAttribute="centerX" secondItem="PWP-Hi-A2n" secondAttribute="centerX" id="Bd6-o1-osW"/>
@@ -147,7 +131,6 @@
                             <constraint firstItem="NMD-Pq-lxr" firstAttribute="top" secondItem="Jbc-KL-cFW" secondAttribute="bottom" constant="16" id="DDt-nv-FSH"/>
                             <constraint firstItem="Jbc-KL-cFW" firstAttribute="trailing" secondItem="MxK-dF-mpX" secondAttribute="trailing" id="HDh-F6-NlG"/>
                             <constraint firstItem="Lmz-JV-zqb" firstAttribute="top" secondItem="mNF-g9-ekH" secondAttribute="bottom" constant="18" id="JPB-Xh-iw2"/>
-                            <constraint firstAttribute="centerY" secondItem="dao-dn-8hj" secondAttribute="centerY" id="Mz7-Ih-4QQ"/>
                             <constraint firstItem="bt6-j9-Xy4" firstAttribute="centerX" secondItem="j9H-uJ-dWe" secondAttribute="centerX" id="NPR-1r-KCY"/>
                             <constraint firstItem="Jbc-KL-cFW" firstAttribute="trailing" secondItem="87Y-g5-aTN" secondAttribute="trailing" id="PQv-Cu-Zmg"/>
                             <constraint firstItem="bt6-j9-Xy4" firstAttribute="centerX" secondItem="Pa4-sd-cgl" secondAttribute="centerX" id="Qap-nQ-wH5"/>
@@ -180,7 +163,6 @@
                         </constraints>
                     </view>
                     <connections>
-                        <outlet property="activityView" destination="dao-dn-8hj" id="YAj-XA-x4w"/>
                         <outlet property="iconImage" destination="j9H-uJ-dWe" id="QhW-zV-QvA"/>
                         <outlet property="labelIcon" destination="NMD-Pq-lxr" id="dpC-FC-Jku"/>
                         <outlet property="labelLatitude" destination="yid-Ve-bhC" id="4lN-Ud-hE1"/>
