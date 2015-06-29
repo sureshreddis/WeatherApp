@@ -106,6 +106,7 @@ class ViewController: UIViewController,CLLocationManagerDelegate {
             if (seenError == false) {
                 seenError = true
                 displayAlert("Error getting location")
+                self.activityView.stopAnimating()
             }
         }
     }
