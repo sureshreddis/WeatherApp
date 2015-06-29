@@ -13,18 +13,18 @@ import CoreLocation
 var forecastURL:String = "https://api.forecast.io/forecast"
 var forecastAPIKey:String = "b29931b6d706be43f1dcf08ed056dfc9"
 var weatherReportArray:Array = [WeatherReportModel]()
-var latitudeOfLocation:String?
-var longitudeOfLocation:String?
-var timeZoneOfLocation:String?
+var latitudeOfLocation:CLLocationDegrees?
+var longitudeOfLocation:CLLocationDegrees?
 var seenError : Bool = false
+var isGetLocation:Int = 0
 
 class ViewController: UIViewController,CLLocationManagerDelegate {
     
     var locationManager = CLLocationManager()
+    var activityView:UIActivityIndicatorView!
     var serviceParserObject = DataServiceParser.sharedInstance
 
     @IBOutlet weak var segControl: UISegmentedControl!
-    @IBOutlet weak var activityView: UIActivityIndicatorView!
     @IBOutlet weak var labelTimeZone: UILabel!
     @IBOutlet weak var iconImage: UIImageView!
     @IBOutlet weak var labelSummary: UILabel!
@@ -34,13 +34,23 @@ class ViewController: UIViewController,CLLocationManagerDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        activityView.startAnimating()
         self.view.userInteractionEnabled = false
+        self.createActivityView()
         
-        let locations:(Double,Double) = getCurrentLocation()
-        let urlPath = NSString(format: "%@/%@/%f,%f",forecastURL,forecastAPIKey,locations.0,locations.1)
-        self.getWeatherData(urlPath as String)
+        locationManager.delegate = self
+        locationManager.desiredAccuracy = kCLLocationAccuracyBest
+        locationManager.requestWhenInUseAuthorization()
+        locationManager.startUpdatingLocation()
+
         // Do any additional setup after loading the view, typically from a nib.
+    }
+    
+    // Add Activity View to the Centre of the View
+    func createActivityView() {
+        activityView = UIActivityIndicatorView(activityIndicatorStyle: .WhiteLarge)
+        activityView.center = self.view.center
+        activityView.startAnimating()
+        self.view.addSubview(activityView)
     }
     
     override func didReceiveMemoryWarning() {
@@ -56,9 +66,38 @@ class ViewController: UIViewController,CLLocationManagerDelegate {
                 println("Reverse geocoder failed with error" + error.localizedDescription)
                 return
             }
+            
+            if placemarks.count > 0
+            {
+                let pm = placemarks[0] as! CLPlacemark
+                self.displayLocation(pm)
+            }
         })
     }
     
+    // MARK:- Get Latitude and Longitude from CLPlacemark
+    func displayLocation(placeMark: CLPlacemark) {
+        self.locationManager.stopUpdatingLocation()
+        longitudeOfLocation = placeMark.location.coordinate.longitude
+        latitudeOfLocation = placeMark.location.coordinate.latitude
+        
+        // Avoid Hitting Weather Request Multiple Times
+        if isGetLocation == 0 {
+            isGetLocation++
+            self.hitWeatherRequest()
+        }
+        
+    }
+    
+    // MARK:- Hit Request with the parameters
+    func hitWeatherRequest() {
+        
+        let urlPath = NSString(format: "%@/%@/%f,%f",forecastURL,forecastAPIKey,latitudeOfLocation!,longitudeOfLocation!)
+        self.getWeatherData(urlPath as String)
+
+    }
+    
+    // CLLocationManager Failure Delegate
     func locationManager(manager: CLLocationManager!, didFailWithError error: NSError!) {
         locationManager.stopUpdatingLocation()
         if (error != nil) {
@@ -72,47 +111,28 @@ class ViewController: UIViewController,CLLocationManagerDelegate {
     
     // MARK:- Segmented Control Index Change
     @IBAction func segControlTapped(sender: AnyObject) {
-        var segController:UISegmentedControl = sender as! UISegmentedControl
-        switch self.segControl.selectedSegmentIndex {
-        case 0:  if let reportModel = self.serviceParserObject.weatherReportArray?[0] {
-            self.displayData(reportModel)
-            }
-        case 1:  if let reportModel = self.serviceParserObject.weatherReportArray?[1] {
-            self.displayData(reportModel)
-            }
-        case 2:  if let reportModel = self.serviceParserObject.weatherReportArray?[2] {
-            self.displayData(reportModel)
-            }
-        default:  if let reportModel = self.serviceParserObject.weatherReportArray?[3] {
-            self.displayData(reportModel)
+        
+        var title = self.segControl.titleForSegmentAtIndex(sender.selectedSegmentIndex)
+        var arrayOfStrings:[String] = self.serviceParserObject.arrayOfItems!
+        var checkForString:Bool = false
+        for titleString in arrayOfStrings {
+            if title == titleString {
+                checkForString = true
+                break
+            } else {
+                checkForString = false
             }
         }
-    }
-    
-    // MARK: -  This Function return Latitude and Longitude of current User Location
-
-    func getCurrentLocation()-> (Double, Double) {
-        
-        locationManager.delegate = self
-        locationManager.desiredAccuracy = kCLLocationAccuracyBest
-        locationManager.requestAlwaysAuthorization()
-        locationManager.startUpdatingLocation()
-        
-        let location = self.locationManager.location
-        
-        //To Check in Simulator ,Click Debug menu then Location and select Apple from the sub menu list.
-        //Still nothing happens with the app and no messages are written to the console.
-        if let loc = location {
-        var  latitude:Double = location.coordinate.latitude
-        var longitude: Double = location.coordinate.longitude
-        return (latitude,longitude)
+        if (checkForString == true) {
+            if let reportModel = self.serviceParserObject.weatherReportArray?[sender.selectedSegmentIndex] {
+                self.displayData(reportModel)
+            }
         }
         else {
-           self.displayAlert("Not able to fetch Location,Please check Location Services in Settings")
-            return (0.00,0.00)
+            self.displayAlert("Data is not available for \(title)")
         }
-        return (0.00,0.00)
     }
+
     
     // MARK: -  This is internal Class used to check Network Connectivity
     internal class Reachability {
@@ -190,8 +210,8 @@ class ViewController: UIViewController,CLLocationManagerDelegate {
         
         }
         else {
-            activityView.stopAnimating()
-            activityView.removeFromSuperview()
+            self.activityView.stopAnimating()
+            self.activityView.removeFromSuperview()
             self.view.userInteractionEnabled = false
         }
     }
@@ -226,7 +246,7 @@ class ViewController: UIViewController,CLLocationManagerDelegate {
             case "clear-day":
                 self.iconImage.image = UIImage(named:"clear_day_Image")
             default:
-                self.iconImage.image = UIImage(named:"default_Image")
+                self.iconImage.image = UIImage(named:"dafault_Image")
             }
         }
     }
