@@ -36,7 +36,7 @@ class ViewController: UIViewController,CLLocationManagerDelegate {
         super.viewDidLoad()
         self.view.userInteractionEnabled = false
         locationManager.delegate = self
-        locationManager.desiredAccuracy = kCLLocationAccuracyBest
+        locationManager.desiredAccuracy = kCLLocationAccuracyHundredMeters
         
         if Reachability.isConnectedToNetwork() {
             // Go ahead and fetch your data from the internet
