@@ -71,7 +71,6 @@ class ViewController: UIViewController,CLLocationManagerDelegate {
                 println("Reverse geocoder failed with error" + error.localizedDescription)
                 return
             }
-            
             if placemarks.count > 0
             {
                 let pm = placemarks[0] as! CLPlacemark
@@ -96,10 +95,8 @@ class ViewController: UIViewController,CLLocationManagerDelegate {
     
     // MARK:- Hit Request with the parameters
     func hitWeatherRequest() {
-        
         let urlPath = NSString(format: "%@/%@/%f,%f",forecastURL,forecastAPIKey,latitudeOfLocation!,longitudeOfLocation!)
         self.getWeatherData(urlPath as String)
-
     }
     
     // CLLocationManager Failure Delegate
@@ -116,13 +113,10 @@ class ViewController: UIViewController,CLLocationManagerDelegate {
     
     // MARK:- Segmented Control Index Change
     @IBAction func segControlTapped(sender: AnyObject) {
-        
-
-        //if (checkForString == true) {
-            if let reportModel = self.serviceParserObject.weatherReportArray?[sender.selectedSegmentIndex] {
+    
+        if let reportModel = self.serviceParserObject.weatherReportArray?[sender.selectedSegmentIndex] {
                 self.displayData(reportModel)
             }
-        //}
         else {
             self.displayAlert("Data is not available for \(title)")
         }
@@ -150,7 +144,6 @@ class ViewController: UIViewController,CLLocationManagerDelegate {
                     status = true
                 }
             }
-            
             return status
         }
     }
@@ -211,15 +204,12 @@ class ViewController: UIViewController,CLLocationManagerDelegate {
                 self.segControl.removeSegmentAtIndex(titleIndex, animated: false)
                 titleIndex++
             }
-            
         }
     }
      // MARK: -  Custom Alert Function by passing message as parameter
     func displayAlert (message:String) {
-        // For
         var alert = UIAlertView(title: "Alert!", message: message, delegate: nil, cancelButtonTitle: "OK")
         alert.show()
-        
     }
     
     
