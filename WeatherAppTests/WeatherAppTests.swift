@@ -31,15 +31,7 @@ class WeatherAppTests: XCTestCase {
         XCTAssert(true, "Pass")
     }
     
-    func testForRetrieveLocationData()
-    {
-        //Please add your location coordinates for this testcase true
-        let expectedLocationCoordinate :(Double,Double) = (13.0827,80.2707)
-        let coordinateData = controller.getCurrentLocation()
-        
-        XCTAssertEqual(coordinateData.0,expectedLocationCoordinate.0, "test02getUserID");
-        
-    }
+
     func testGetWetherData()
     {
         let locations:(Double,Double) = (13.0827,80.2707)
