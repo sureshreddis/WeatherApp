@@ -35,12 +35,17 @@ class ViewController: UIViewController,CLLocationManagerDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.view.userInteractionEnabled = false
-        self.createActivityView()
-        
         locationManager.delegate = self
         locationManager.desiredAccuracy = kCLLocationAccuracyBest
-        locationManager.requestWhenInUseAuthorization()
-        locationManager.startUpdatingLocation()
+        
+        if Reachability.isConnectedToNetwork() {
+            // Go ahead and fetch your data from the internet
+            self.createActivityView()
+            locationManager.requestWhenInUseAuthorization()
+            locationManager.startUpdatingLocation()
+        } else {
+            displayAlert("Network Connectivity Failure.\nPlease check you are connected to the Internet/Network")
+        }
 
         // Do any additional setup after loading the view, typically from a nib.
     }
@@ -112,22 +117,12 @@ class ViewController: UIViewController,CLLocationManagerDelegate {
     // MARK:- Segmented Control Index Change
     @IBAction func segControlTapped(sender: AnyObject) {
         
-        var title = self.segControl.titleForSegmentAtIndex(sender.selectedSegmentIndex)
-        var arrayOfStrings:[String] = self.serviceParserObject.arrayOfItems!
-        var checkForString:Bool = false
-        for titleString in arrayOfStrings {
-            if title == titleString {
-                checkForString = true
-                break
-            } else {
-                checkForString = false
-            }
-        }
-        if (checkForString == true) {
+
+        //if (checkForString == true) {
             if let reportModel = self.serviceParserObject.weatherReportArray?[sender.selectedSegmentIndex] {
                 self.displayData(reportModel)
             }
-        }
+        //}
         else {
             self.displayAlert("Data is not available for \(title)")
         }
@@ -145,7 +140,7 @@ class ViewController: UIViewController,CLLocationManagerDelegate {
             let url = NSURL(string: "http://google.com")
             let request = NSMutableURLRequest(URL: url!)
             request.HTTPMethod = "HEAD"
-            request.cachePolicy = NSURLRequestCachePolicy.ReloadIgnoringLocalAndRemoteCacheData
+            request.cachePolicy = NSURLRequestCachePolicy.ReloadIgnoringLocalCacheData
             request.timeoutInterval = 10.0
             
             var response:NSURLResponse?
@@ -164,17 +159,7 @@ class ViewController: UIViewController,CLLocationManagerDelegate {
     func getWeatherData (urlString: String) {
         let forecastURL = NSURL(string: urlString)
         let urlSession = NSURLSession.sharedSession()
-        var isConnectivity:Bool = false
         
-        if Reachability.isConnectedToNetwork() {
-            // Go ahead and fetch your data from the internet
-            isConnectivity = true
-        } else {
-            isConnectivity = false
-            displayAlert("Please ensure you are connected to the Internet")
-        }
-        
-        if (isConnectivity == true) {
         // Initiate json Request
         let jsonQuery = urlSession.dataTaskWithURL(forecastURL!, completionHandler: { data, response, error -> Void in
             if (error != nil) {
@@ -196,6 +181,7 @@ class ViewController: UIViewController,CLLocationManagerDelegate {
                 self.activityView.stopAnimating()
                 self.activityView.removeFromSuperview()
                 self.view.userInteractionEnabled = true
+                self.modifySegControl()
                 
                 self.labelLatitude.text = self.serviceParserObject.weatherGlobalModelObject.latitude
                 self.labelLongitude.text = self.serviceParserObject.weatherGlobalModelObject.longitude
@@ -208,14 +194,26 @@ class ViewController: UIViewController,CLLocationManagerDelegate {
         })
         jsonQuery.resume()
         
-        }
-        else {
-            self.activityView.stopAnimating()
-            self.activityView.removeFromSuperview()
-            self.view.userInteractionEnabled = false
-        }
+
     }
     
+    func modifySegControl() {
+        
+        var titleIndex:Int = 0
+        var arrayOfStrings:[String] = self.serviceParserObject.arrayOfItems!
+        var checkForString:Bool = false
+        for titleString in arrayOfStrings {
+            var title = self.segControl.titleForSegmentAtIndex(titleIndex)
+            if titleString == title {
+                titleIndex++
+                continue
+            } else {
+                self.segControl.removeSegmentAtIndex(titleIndex, animated: false)
+                titleIndex++
+            }
+            
+        }
+    }
      // MARK: -  Custom Alert Function by passing message as parameter
     func displayAlert (message:String) {
         // For
