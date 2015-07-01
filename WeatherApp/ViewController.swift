@@ -105,7 +105,7 @@ class ViewController: UIViewController,CLLocationManagerDelegate {
         if (error != nil) {
             if (seenError == false) {
                 seenError = true
-                displayAlert("Error getting location")
+                displayAlert("Error getting location.\nPlease update location other than None via Simulator->Debug->Location")
                 self.activityView.stopAnimating()
             }
         }
